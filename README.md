@@ -19,7 +19,7 @@ This is a simple, secure chatting application developed using **C#** with **Wind
 
 Click the download icon below to get the latest executable file:
 
-[![Download](https://img.shields.io/badge/Download-EXE-blue?logo=windows)]([./path/to/your/SecureChatApp.exe](https://github.com/NafisAyon/SecureChat/releases/download/v1.0/Chatting.exe))
+[![Download](https://img.shields.io/badge/Download-EXE-blue?logo=windows)](https://github.com/NafisAyon/SecureChat/releases/download/v1.0/Chatting.exe)
 
 ---
 
