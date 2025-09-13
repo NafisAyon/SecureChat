@@ -1,11 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using Chatting;
 
 public partial class ChatForm : Form
@@ -22,7 +18,6 @@ public partial class ChatForm : Form
 
     public ChatForm()
     {
-        //InitializeComponent();
         SetupUser();
         SetupUI();
         SetupConnection();
@@ -37,7 +32,6 @@ public partial class ChatForm : Form
         }
     }
 
-    //private RichTextBox chatBox;
     private FlowLayoutPanel chatPanel;
     private TextBox inputBox;
     private Button sendButton;
@@ -48,16 +42,6 @@ public partial class ChatForm : Form
         this.Text = "Secure Chat (C#)";
         this.Width = 600;
         this.Height = 500;
-
-        // Chat Box
-        //chatBox = new RichTextBox
-        //{
-        //    ReadOnly = true,
-        //    Dock = DockStyle.Fill,
-        //    Font = new Font("Segoe UI", 10),
-        //    BackColor = Color.White,
-        //    ScrollBars = RichTextBoxScrollBars.Vertical
-        //};
         chatPanel = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -108,7 +92,6 @@ public partial class ChatForm : Form
         bottomPanel.Controls.Add(inputBox);
 
         // Add controls to form
-        //this.Controls.Add(chatBox);
         this.Controls.Add(chatPanel);
         this.Controls.Add(bottomPanel);
 
@@ -162,7 +145,6 @@ public partial class ChatForm : Form
         else if (role.ToLower() == "c")
         {
             string ip = Microsoft.VisualBasic.Interaction.InputBox("Enter host IP:", "Connect to Host");
-            //peerName = Microsoft.VisualBasic.Interaction.InputBox("Enter peer's name:", "Peer Name");
             StartConnector(ip);
         }
         else
@@ -173,7 +155,6 @@ public partial class ChatForm : Form
     }
     private void StartListener()
     {
-        //peerName = Microsoft.VisualBasic.Interaction.InputBox("Enter peer's name:", "Peer Name");
 
         server = new TcpListener(IPAddress.Any, 12345);
         server.Start();
@@ -199,7 +180,6 @@ public partial class ChatForm : Form
             stream = client.GetStream();
             AppendBubble("--- Connected to peer.", true);
             SendName();
-            //InitiateKeyExchange();
             new Thread(ReceiveMessages).Start();
         }
         catch
@@ -220,41 +200,6 @@ public partial class ChatForm : Form
         string json = JsonConvert.SerializeObject(nameMsg) + "\n";
         byte[] data = Encoding.UTF8.GetBytes(json);
         stream.Write(data, 0, data.Length);
-    }
-
-
-    private void StartServer()
-    {
-        server = new TcpListener(IPAddress.Any, 12345);
-        server.Start();
-        AppendBubble("--- Server started. Waiting for client...", true);
-
-        listenThread = new Thread(() =>
-        {
-            client = server.AcceptTcpClient();
-            stream = client.GetStream();
-            AppendBubble("--- Client connected.", true);
-            ReceiveMessages();
-        });
-        listenThread.Start();
-    }
-
-    private void StartClient()
-    {
-        string ip = Microsoft.VisualBasic.Interaction.InputBox("Enter server IP:", "Connect");
-        try
-        {
-            client = new TcpClient();
-            client.Connect(IPAddress.Parse(ip), 12345);
-            stream = client.GetStream();
-            AppendBubble("--- Connected to server.", true);
-            new Thread(ReceiveMessages).Start();
-        }
-        catch
-        {
-            MessageBox.Show("Failed to connect.");
-            this.Close();
-        }
     }
 
     private void SendMessage()
@@ -464,38 +409,4 @@ public partial class ChatForm : Form
         AdjustBubbleWidths(); // make sure width fits
         chatPanel.ScrollControlIntoView(bubble); // Auto scroll to bottom
     }
-
-    //private void AppendText(string msg)
-    //{
-    //    if (InvokeRequired)
-    //    {
-    //        this.Invoke(new Action(() => AppendText(msg)));
-    //        return;
-    //    }
-    //    if (msg.StartsWith($"{userName}:") || msg.StartsWith($"{peerName}:"))
-    //    {
-    //        int colonIndex = msg.IndexOf(':');
-    //        if (colonIndex > 0)
-    //        {
-    //            string name = msg.Substring(0, colonIndex + 1); // "You:" or "Peer:"
-    //            string message = msg.Substring(colonIndex + 1); // rest of the message
-
-    //            // Bold name
-    //            chatBox.SelectionStart = chatBox.TextLength;
-    //            chatBox.SelectionFont = new Font(chatBox.Font, FontStyle.Bold);
-    //            chatBox.AppendText(name);
-
-    //            // Normal message
-    //            chatBox.SelectionStart = chatBox.TextLength;
-    //            chatBox.SelectionFont = new Font(chatBox.Font, FontStyle.Regular);
-    //            chatBox.AppendText(message + Environment.NewLine);
-    //            return;
-    //        }
-    //    }
-
-    //    // Default append
-    //    chatBox.SelectionStart = chatBox.TextLength;
-    //    chatBox.SelectionFont = new Font(chatBox.Font, FontStyle.Regular);
-    //    chatBox.AppendText(msg + Environment.NewLine);
-    //}
 }
